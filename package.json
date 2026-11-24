@@ -1,0 +1,8 @@
+{
+  "name": "herdr-pizarra",
+  "private": true,
+  "type": "module",
+  "description": "Tests for the Pizarra mod. The mod itself is mods/pizarra/ and needs no install.",
+  "scripts": { "test": "node --test" },
+  "engines": { "node": ">=20" }
+}

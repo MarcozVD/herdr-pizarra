@@ -1,0 +1,38 @@
+{
+  "place": "none",
+  "title": "Pizarra",
+  "focusable": true,
+  "overlay": {
+    "kind": "dialog",
+    "width": 0.95,
+    "height": 0.95
+  },
+  "palette": [
+    {
+      "title": "Pizarra al lado",
+      "command": "mod.open",
+      "args": {
+        "name": "pizarra-panel"
+      },
+      "words": "whiteboard panel dibujar boceto wireframe"
+    },
+    {
+      "title": "Pizarra abajo",
+      "command": "pane.split",
+      "args": {
+        "direction": "down",
+        "mod": "pizarra"
+      },
+      "words": "whiteboard panel dibujar"
+    },
+    {
+      "title": "Pizarra en pestaña",
+      "command": "tab.new",
+      "args": {
+        "name": "pizarra",
+        "mod": "pizarra"
+      },
+      "words": "whiteboard tab dibujar"
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+resvg.mjs and resvg.wasm are @resvg/resvg-wasm 2.6.2, unmodified, under the Mozilla Public License 2.0.
+Source: https://github.com/yisibl/resvg-js   License: https://www.mozilla.org/MPL/2.0/
