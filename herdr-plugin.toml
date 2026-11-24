@@ -1,6 +1,6 @@
 id = "marcozvd.pizarra"
 name = "Pizarra"
-version = "0.1.0"
+version = "0.1.1"
 min_herdr_version = "0.9.0"
 description = "A whiteboard beside your terminal: draw a layout and send it to an agent, or let the agent draw it and correct it."
 platforms = ["linux", "macos", "windows"]

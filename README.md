@@ -3,6 +3,8 @@
 A whiteboard beside your terminal. Draw a layout and send it to a coding agent, or ask the agent to
 draw what it's going to build and correct it by hand before it writes code.
 
+![The board beside Claude Code in the Herdr desktop app: the agent's layout, with the person's red marks on it](docs/herdr-app.png)
+
 It comes in three forms that share one board per project (`.pizarra/board.json`):
 
 | Where | Drawn with | Agents |
@@ -16,6 +18,14 @@ It comes in three forms that share one board per project (`.pizarra/board.json`)
 - The agent gets a PNG, the scene as JSON, and the list of what you changed since its last drawing.
 - What the agent draws shows within a second or so, highlighted, and Ctrl+Z undoes it. If you both
   change the board at once, both changes stay; on the same element yours wins.
+
+| Claude Code | Herdr terminal |
+| --- | --- |
+| ![The board in a Claude Code pane](docs/claude-code.png) | ![The board in a Herdr pane](docs/herdr-terminal.png) |
+
+The panel at 300, 400 and 570px wide in the desktop app:
+
+![Three widths of the panel](docs/sizes.png)
 
 All three need [Node](https://nodejs.org) 20 or newer on PATH. The interface is in Spanish.
 
@@ -35,7 +45,7 @@ Answer `y` to add the marketplace and pick a scope. Then `/pizarron` opens the b
 herdr plugin install MarcozVD/herdr-pizarra
 ```
 
-Bind a key to it in Herdr's `config.toml`:
+Bind a key to it in Herdr's `config.toml`; with this one it's `ctrl+b`, then `i`:
 
 ```toml
 [[keys.command]]

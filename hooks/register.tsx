@@ -14,7 +14,6 @@ const POLL_MS = 1000
 const MOST = 90_000
 
 const shown = atom({ plugin: 'pizarra', key: 'shown' } as const, null as Shown | null, { shape: 'shown-1' })
-const isOpen = atom({ plugin: 'pizarra', key: 'isOpen' } as const, false, { shape: 'open-1' })
 
 type Elements = ReturnType<typeof parse>['elements']
 
@@ -23,6 +22,8 @@ let cli = ''
 let seen: Elements | null = null
 let lastText: string | null | undefined
 let lastPost = 0
+// Not in $.state: a /clear empties that and leaves the pane open.
+let isOpen = false
 
 async function readText($: EngineInterface, path: string): Promise<string | null> {
   return (await $.fs.exists(path)) ? $.fs.read(path) : null
@@ -101,7 +102,9 @@ export const register: Register = on => {
     const started = await next(e)
     await $.command.register({ name: 'pizarron', description: 'Abre la pizarra al lado del chat para dibujar y enviar a Claude' })
     $.clock.every(POLL_MS, async () => {
-      if (await read($, isOpen)) await look($).catch(() => {})
+      if (!isOpen) return
+      if ((await read($, shown)) === null) lastText = undefined
+      await look($).catch(() => {})
     })
     return started
   })
@@ -113,17 +116,18 @@ export const register: Register = on => {
     } catch (error) {
       return { text: `No se pudo abrir la pizarra: ${error instanceof Error ? error.message : String(error)}` }
     }
-    await update($, isOpen, () => true)
+    isOpen = true
     const { isPlaced } = await $.ui.open({ id: PANE, title: 'Pizarra', focus: true })
     return { text: isPlaced ? `Pizarra abierta: ${dir}` : 'La pizarra espera espacio: ensancha la terminal' }
   })
 
   on('ui.close', async ($, e, next) => {
-    if (e.id === PANE) await update($, isOpen, () => false)
+    if (e.id === PANE) isOpen = false
     return next(e)
   })
 
   on('ui.render', { component: 'Pane', requestId: PANE }, async ($, e) => {
+    isOpen = true
     const now = await read($, shown)
     if (e.surface !== 'terminal' && e.surface !== 'desktop') {
       const { Text } = $.ui.resolve(e)

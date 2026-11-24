@@ -1,6 +1,6 @@
 {
   "name": "pizarra",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A whiteboard beside the chat: draw a layout and send it to Claude, or let Claude draw it and correct it.",
   "license": "MIT",
   "types": "./types/index.d.ts"

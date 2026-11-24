@@ -9,6 +9,6 @@ export type Post = {
 
 declare module 'claude-code' {
   interface PluginState {
-    pizarra: { shown: Shaped<Shown | null>; isOpen: Shaped<boolean> }
+    pizarra: { shown: Shaped<Shown | null> }
   }
 }

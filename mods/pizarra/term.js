@@ -139,8 +139,16 @@ export function paint(sheet, elements, view) {
       }
       continue;
     }
-    const [x, y, w, h] = [X(el.x), Y(el.y), el.w * view.k, el.h * view.k];
-    const right = x + w; const bottom = y + h;
+    let [x, y, w, h] = [X(el.x), Y(el.y), el.w * view.k, el.h * view.k];
+    if (el.type !== "text" && el.type !== "ellipse") {
+      // Boxes sit on whole cells, so the outline, the fill and the text agree.
+      const snap = (v, c) => Math.round(v / c) * c;
+      w = Math.max(CELL.w, snap(x + w, CELL.w) - snap(x, CELL.w));
+      h = Math.max(CELL.h, snap(y + h, CELL.h) - snap(y, CELL.h));
+      x = snap(x, CELL.w);
+      y = snap(y, CELL.h);
+    }
+    const right = x + w - 1; const bottom = y + h - 1;
     const fill = el.fill ? inkOf(el.fill) : null;
     const outline = (c, o) => {
       sheet.line(x, y, right, y, c, o); sheet.line(x, bottom, right, bottom, c, o);
@@ -150,7 +158,8 @@ export function paint(sheet, elements, view) {
     const cx0 = Math.round(x / CELL.w); const cy0 = Math.floor(y / CELL.h);
     const middle = (c) => {
       if (!el.text || w < CELL.w * 2) return;
-      const room = Math.max(1, Math.floor(w / CELL.w) - (w > CELL.w * 6 ? 2 : 0));
+      const cells = Math.floor(w / CELL.w);
+      const room = Math.max(1, cells - (cells > 11 ? 2 : 0));
       const lines = wrapCells(el.text, room).slice(0, Math.max(1, Math.floor(h / CELL.h)));
       const top = Math.round((y + h / 2) / CELL.h - lines.length / 2);
       lines.forEach((l, i) => sheet.text(Math.round((x + w / 2) / CELL.w - l.length / 2), top + i, l, c, bold));
@@ -162,7 +171,7 @@ export function paint(sheet, elements, view) {
     } else if (el.type === "note") {
       sheet.fill(x, y, w, h, blend(fill ?? INK.yellow, 0.22), false);
       const room = Math.max(1, Math.floor(w / CELL.w) - 2);
-      wrapCells(el.text ?? "", room).slice(0, Math.max(1, Math.floor(h / CELL.h))).forEach((l, i) => sheet.text(cx0 + 1, cy0 + i + (y % CELL.h > CELL.h / 2 ? 1 : 0), l, color));
+      wrapCells(el.text ?? "", room).slice(0, Math.max(1, Math.floor(h / CELL.h))).forEach((l, i) => sheet.text(cx0 + 1, cy0 + i, l, color));
     } else if (el.type === "frame") {
       outline(INK.gray, {});
       sheet.text(cx0, cy0 - 1, (el.text ?? "").slice(0, Math.max(4, Math.floor(w / CELL.w))), QUIET, true);
